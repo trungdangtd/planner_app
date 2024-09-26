@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:planner_app/setting_screen.dart';
-import 'package:planner_app/widget/calendar_view_screen.dart';
-import 'package:planner_app/widget/task_list_screen.dart';
+import 'package:planner_app/screen/setting_screen.dart';
+import 'package:planner_app/screen/calendar_view_screen.dart';
+import 'package:planner_app/screen/task_list_screen.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -12,25 +12,25 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-  int _selectedIndex = 0; // Default to the first tab
+  int _selectedIndex = 0; 
 
   // List of screens
   final List<Widget> _screens = [
-    const TaskListScreen(), // Replace with your Task Screen
-    const CalendarViewScreen(), // Replace with your Calendar Screen
-    const SettingScreen(), // Replace with your Settings Screen
+    const TaskListScreen(), 
+    const CalendarViewScreen(), 
+    const SettingScreen(), 
   ];
 
   void _onItemTapped(int index) {
     setState(() {
-      _selectedIndex = index; // Update the selected index
+      _selectedIndex = index;
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _screens[_selectedIndex], // Display the selected screen
+      body: _screens[_selectedIndex], 
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
@@ -46,9 +46,9 @@ class _MainScreenState extends State<MainScreen> {
             label: 'Cài đặt',
           ),
         ],
-        currentIndex: _selectedIndex, // Set the current index
+        currentIndex: _selectedIndex,
         selectedItemColor: Colors.green,
-        onTap: _onItemTapped, // Update the selected index on tap
+        onTap: _onItemTapped, 
       ),
     );
   }

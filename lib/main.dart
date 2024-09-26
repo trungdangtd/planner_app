@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:planner_app/welcome_screen.dart';
+import 'package:planner_app/screen/welcome_screen.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();

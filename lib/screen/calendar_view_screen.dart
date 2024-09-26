@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:planner_app/data/helper/db_helper.dart';
 import 'package:planner_app/data/model/task_model.dart';
 import 'package:planner_app/widget/card_body.dart';
-import 'package:planner_app/widget/update_task_screen.dart';
+import 'package:planner_app/screen/update_task_screen.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 class CalendarViewScreen extends StatefulWidget {

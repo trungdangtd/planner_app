@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:planner_app/data/helper/db_helper.dart';
 import 'package:planner_app/data/model/task_model.dart';
-import 'package:planner_app/widget/update_task_screen.dart'; // Make sure to import your UpdateTaskScreen
+import 'package:planner_app/screen/update_task_screen.dart'; // Make sure to import your UpdateTaskScreen
 
 class TaskDetailScreen extends StatelessWidget {
   final TaskModel task;
