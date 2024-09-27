@@ -100,7 +100,7 @@ class _StatisticScreenState extends State<StatisticScreen> {
               style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 20),
-            _buildTaskSummary(), // Gọi hàm hiển thị tổng quan
+            _buildTaskSummary(), 
           ],
         ),
       ),

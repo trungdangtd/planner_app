@@ -21,7 +21,7 @@ class UserModel {
 
   factory UserModel.fromMap(Map<String, dynamic> map) {
     return UserModel(
-      id: map['id'], // Ensure this key exists in your database
+      id: map['id'], 
       email: map['email'] ?? '',
       password: map['password'] ?? '',
     );

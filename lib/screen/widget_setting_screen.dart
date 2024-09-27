@@ -153,12 +153,12 @@ class _SettingsScreenState extends State<SettingsWidgetScreen> {
                           color: _selectedFont == font ? _selectedAppBarColor : Colors.black)),
                   onTap: () {
                     setState(() {
-                      _selectedFont = font; // Update selected font
+                      _selectedFont = font; 
                     });
                     saveSettings(_selectedAppBarColor, _selectedBackgroundColor, _selectedFont); // Save settings
                     Provider.of<ColorTextProvider>(context, listen: false)
-                        .setFont(_selectedFont); // Update font
-                    Navigator.pop(context); // Close dialog
+                        .setFont(_selectedFont); 
+                    Navigator.pop(context);
                   },
                 );
               },

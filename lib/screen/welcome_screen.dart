@@ -7,7 +7,7 @@ class WelcomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      
+      backgroundColor: const Color.fromRGBO(200, 230, 201, 1),
       appBar: AppBar(
           title: const Text('Daily Planner'),
           ),

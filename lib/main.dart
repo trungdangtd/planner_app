@@ -39,17 +39,17 @@ class MyApp extends StatelessWidget {
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
             backgroundColor:
-                colorProvider.appColor, // Button color from provider
+                colorProvider.appColor, 
           ),
         ),
         scaffoldBackgroundColor:
-            colorProvider.backgroundColor, // Background color from provider
+            colorProvider.backgroundColor,
         brightness: themeNotifier.isDarkMode
             ? Brightness.dark
-            : Brightness.light, // Brightness based on theme
-        fontFamily: colorProvider.font, // Set the font family from provider
+            : Brightness.light, 
+        fontFamily: colorProvider.font, 
       ),
-      home: const WelcomeScreen(), // Set the initial screen
+      home: const WelcomeScreen(), 
     );
   }
 }

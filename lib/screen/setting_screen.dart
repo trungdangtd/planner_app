@@ -3,6 +3,7 @@ import 'package:planner_app/screen/statistics_task_screen.dart';
 import 'package:planner_app/screen/widget_setting_screen.dart';
 import 'package:planner_app/widget/theme_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:planner_app/screen/task_notification_screen.dart'; // Import the TaskNotificationScreen
 
 class SettingScreen extends StatelessWidget {
   const SettingScreen({super.key});
@@ -28,11 +29,20 @@ class SettingScreen extends StatelessWidget {
             const SizedBox(height: 20),
             _buildSettingOption(
               context,
-              Icons.bar_chart,
+              Icons.color_lens,
               'Chỉnh sửa giao diện',
               const SettingsWidgetScreen(),
             ),
             const SizedBox(height: 20),
+
+            _buildSettingOption(
+              context,
+              Icons.notifications,
+              'Cài Đặt Thông Báo Nhiệm Vụ',
+              const TaskNotificationScreen(), 
+            ),
+            const SizedBox(height: 20),
+
             SwitchListTile(
               title: const Text('Chế độ tối'),
               value: themeNotifier.isDarkMode,

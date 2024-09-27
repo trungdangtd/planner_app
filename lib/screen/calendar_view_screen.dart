@@ -3,6 +3,7 @@ import 'package:planner_app/data/helper/db_helper.dart';
 import 'package:planner_app/data/model/task_model.dart';
 import 'package:planner_app/widget/card_body.dart';
 import 'package:planner_app/screen/update_task_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 class CalendarViewScreen extends StatefulWidget {
@@ -26,30 +27,36 @@ class _CalendarViewScreenState extends State<CalendarViewScreen> {
   }
 
   Future<void> _fetchTasksForCalendar() async {
-    // Replace `currentUserId` with the actual logged-in user's ID
-    int currentUserId = 1; // Example user ID
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    int currentUserId = prefs.getInt('userId') ??
+        0; 
 
-    List<TaskModel> tasks = await _dbHelper.getTasks(currentUserId);
-    setState(() {
-      _tasksByDate = _groupTasksByDate(tasks);
-      _selectedDayTasks = _tasksByDate[_focusedDay] ?? [];
-    });
+    if (currentUserId != 0) {
+      List<TaskModel> tasks = await _dbHelper.getTasks(currentUserId);
+      setState(() {
+        _tasksByDate = _groupTasksByDate(tasks); 
+        _selectedDayTasks =
+            _tasksByDate[_focusedDay] ?? []; 
+      });
+    } else {
+      setState(() {
+        _tasksByDate = {}; 
+        _selectedDayTasks = []; 
+      });
+    }
   }
 
   Map<DateTime, List<TaskModel>> _groupTasksByDate(List<TaskModel> tasks) {
     Map<DateTime, List<TaskModel>> data = {};
 
     for (var task in tasks) {
-      // Normalize the task date to just the date (time set to midnight)
       DateTime taskDate =
           DateTime(task.date.year, task.date.month, task.date.day);
 
-      // Initialize the list if it doesn't exist for the given date
       if (data[taskDate] == null) {
         data[taskDate] = [];
       }
 
-      // Add the task to the list for that date
       data[taskDate]!.add(task);
     }
 
@@ -60,8 +67,6 @@ class _CalendarViewScreenState extends State<CalendarViewScreen> {
     setState(() {
       _selectedDay = selectedDay;
       _focusedDay = focusedDay;
-
-      // Normalize the selected day for lookup
       DateTime normalizedSelectedDay =
           DateTime(selectedDay.year, selectedDay.month, selectedDay.day);
       _selectedDayTasks = _tasksByDate[normalizedSelectedDay] ?? [];
@@ -72,8 +77,8 @@ class _CalendarViewScreenState extends State<CalendarViewScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          title: const Text('Lịch công việc'),
-          ),
+        title: const Text('Lịch công việc'),
+      ),
       body: Column(
         children: [
           TableCalendar(
@@ -153,6 +158,6 @@ class _CalendarViewScreenState extends State<CalendarViewScreen> {
 
   void _handleDelete(int taskId) async {
     await _dbHelper.deleteTask(taskId);
-    _fetchTasksForCalendar(); // Refresh the task list after deletion
+    _fetchTasksForCalendar(); 
   }
 }

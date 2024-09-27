@@ -5,7 +5,6 @@ import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
 class DatabaseHelper {
-  // Singleton pattern
   static final DatabaseHelper _databaseService = DatabaseHelper._internal();
   factory DatabaseHelper() => _databaseService;
   DatabaseHelper._internal();
@@ -38,7 +37,7 @@ class DatabaseHelper {
         password TEXT
       );
       ''');
-       await db.execute('''
+    await db.execute('''
       CREATE TABLE task(
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         name TEXT,
@@ -69,20 +68,19 @@ class DatabaseHelper {
 
   // Lấy người dùng dựa trên email và mật khẩu (đăng nhập)
   Future<UserModel?> getUser(String email, String password) async {
-  final db = await _databaseService.database;
-  final List<Map<String, dynamic>> maps = await db.query(
-    'user', // Ensure this table name is correct
-    where: 'email = ? AND password = ?',
-    whereArgs: [email, password],
-  );
+    final db = await _databaseService.database;
+    final List<Map<String, dynamic>> maps = await db.query(
+      'user', // Ensure this table name is correct
+      where: 'email = ? AND password = ?',
+      whereArgs: [email, password],
+    );
 
-  if (maps.isNotEmpty) {
-    return UserModel.fromMap(maps.first);
+    if (maps.isNotEmpty) {
+      return UserModel.fromMap(maps.first);
+    }
+    return null; // Return null if no user found
   }
-  return null; // Return null if no user found
-}
 
-  // Xóa người dùng (ví dụ: nếu muốn xóa tài khoản)
   Future<void> deleteUser(int id) async {
     final db = await _databaseService.database;
     await db.delete(
@@ -103,39 +101,29 @@ class DatabaseHelper {
     );
   }
 
-  // Get all tasks for a specific user
-  // Future<List<TaskModel>> getTasks(int userId) async {
-  //   final db = await _databaseService.database;
-  //   final List<Map<String, dynamic>> tasks = await db.query(
-  //     'task',
-  //     where: 'userId = ?',
-  //     whereArgs: [userId],
-  //   );
-
-  //   return tasks.map((task) => TaskModel.fromMap(task)).toList();
-  // }
-  Future<List<TaskModel>> getTasks(int? userId) async {
-  final db = await _databaseService.database;
   
-  // Determine the query condition based on whether userId is provided or not
-  String? whereClause;
-  List<dynamic>? whereArgs;
+  Future<List<TaskModel>> getTasks(int? userId) async {
+    final db = await _databaseService.database;
 
-  if (userId != null) {
-    whereClause = 'userId = ?';
-    whereArgs = [userId];
+    // Determine the query condition based on whether userId is provided or not
+    String? whereClause;
+    List<dynamic>? whereArgs;
+
+    if (userId != null) {
+      whereClause = 'userId = ?';
+      whereArgs = [userId];
+    }
+
+    final List<Map<String, dynamic>> tasks = await db.query(
+      'task',
+      where: whereClause,
+      whereArgs: whereArgs,
+    );
+
+    return tasks.isNotEmpty
+        ? tasks.map((task) => TaskModel.fromMap(task)).toList()
+        : []; 
   }
-
-  final List<Map<String, dynamic>> tasks = await db.query(
-    'task',
-    where: whereClause,
-    whereArgs: whereArgs,
-  );
-
-  return tasks.isNotEmpty
-      ? tasks.map((task) => TaskModel.fromMap(task)).toList()
-      : []; // Return an empty list if no tasks are found
-}
 
   // Update a task
   Future<void> updateTask(TaskModel task) async {
@@ -148,7 +136,7 @@ class DatabaseHelper {
     );
   }
 
-  //update status task 
+  //update status task
   Future<void> updateTaskStatus(int id, String newStatus) async {
     final db = await database; // Your database instance
     await db.update(
@@ -158,6 +146,7 @@ class DatabaseHelper {
       whereArgs: [id],
     );
   }
+
   // Delete a task
   Future<void> deleteTask(int id) async {
     final db = await _databaseService.database;

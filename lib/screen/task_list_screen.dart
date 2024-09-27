@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:planner_app/data/helper/notification_helper.dart';
 import 'package:planner_app/screen/add_task.dart';
 import 'package:planner_app/data/helper/db_helper.dart';
 import 'package:planner_app/data/model/task_model.dart';
-import 'package:planner_app/screen/notification_screen.dart';
+import 'package:planner_app/screen/task_notification_screen.dart';
 import 'package:planner_app/widget/card_body.dart';
 import 'package:planner_app/screen/task_detail_screen.dart';
 import 'package:planner_app/screen/update_task_screen.dart';
@@ -24,8 +25,18 @@ class _TaskListScreenState extends State<TaskListScreen> {
   void initState() {
     super.initState();
     _fetchTasks();
+    _scheduleNotification(const TimeOfDay(hour: 0, minute: 1));
+  }
+void _scheduleNotification(TimeOfDay time) {
+  final now = DateTime.now();
+  final scheduledDate = DateTime(now.year, now.month, now.day, time.hour, time.minute);
+
+  if (scheduledDate.isBefore(now)) {
+    scheduledDate.add(const Duration(days: 1));
   }
 
+  NotificationHelper().showNotification(0, 'Nhắc nhở công việc', 'Đến giờ thực hiện công việc!');
+}
   Future<void> _fetchTasks() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     int currentUserId = prefs.getInt('userId') ?? 0;
@@ -59,13 +70,14 @@ class _TaskListScreenState extends State<TaskListScreen> {
     });
   }
 
+  // ignore: unused_element
   void _incrementNotificationCount() {
     setState(() {
       _notificationCount++;
     });
   }
 
-  // Function to handle reordering tasks
+
   void _reorderTasks(int oldIndex, int newIndex) {
     setState(() {
       if (newIndex > oldIndex) {
@@ -73,7 +85,7 @@ class _TaskListScreenState extends State<TaskListScreen> {
       }
       final TaskModel movedTask = _tasks.removeAt(oldIndex);
       _tasks.insert(newIndex, movedTask);
-      // Optionally, you can update the order in the database as well
+     
     });
   }
 
@@ -88,19 +100,14 @@ class _TaskListScreenState extends State<TaskListScreen> {
               IconButton(
                 icon: const Icon(Icons.notifications),
                 onPressed: () {
-                  // Đặt số lượng thông báo về 0 khi người dùng xem thông báo
                   setState(() {
                     _notificationCount = 0;
                   });
 
-                  // Navigate to the Notification screen
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => TaskNotificationScreen(
-                        tasks: _tasks,
-                        incrementNotificationCount: _incrementNotificationCount,
-                      ),
+                      builder: (context) => const TaskNotificationScreen(),
                     ),
                   );
                 },
@@ -137,14 +144,13 @@ class _TaskListScreenState extends State<TaskListScreen> {
           ? const Center(child: Text('Không có công việc nào.'))
           : ReorderableListView(
               padding: const EdgeInsets.all(15),
-              onReorder: _reorderTasks, // Handles reordering
+              onReorder: _reorderTasks,
               children: [
                 for (int index = 0; index < _tasks.length; index++)
                   GestureDetector(
                     key: ValueKey(
-                        _tasks[index].id), // Add a unique key for reordering
+                        _tasks[index].id), 
                     onTap: () {
-                      // Navigate to the Task Detail screen
                       Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -163,7 +169,6 @@ class _TaskListScreenState extends State<TaskListScreen> {
             ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          // Navigate to the Add New Task screen
           Navigator.push(context,
                   MaterialPageRoute(builder: (_) => const AddTaskScreen()))
               .then((_) => _fetchTasks());

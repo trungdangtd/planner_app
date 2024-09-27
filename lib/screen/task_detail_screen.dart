@@ -67,11 +67,11 @@ class TaskDetailScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 10),
 
-                  // Button to mark the task as completed
+                
                   ElevatedButton(
                     onPressed: () async {
                       if (task.status != 'Đã hoàn thành') {
-                        // Show confirmation dialog before marking as completed
+                  
                         bool? confirmed = await showDialog(
                           context: context,
                           builder: (context) => AlertDialog(
@@ -91,12 +91,10 @@ class TaskDetailScreen extends StatelessWidget {
                           ),
                         );
 
-                        if (confirmed == true) {
-                          // Update the task status in the database
+                        if (confirmed == true) {                   
                           await DatabaseHelper()
                               .updateTaskStatus(task.id!, 'Đã hoàn thành');
 
-                          // Show a message and navigate back to the task list
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
                                 content: Text(
@@ -105,10 +103,9 @@ class TaskDetailScreen extends StatelessWidget {
 
                           Navigator.pop(
                             context,
-                          ); // Navigate back to the previous screen
+                          ); 
                         }
                       } else {
-                        // Show a message that the task is already completed
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
                               content: Text('Công việc này đã hoàn thành!')),
@@ -132,7 +129,6 @@ class TaskDetailScreen extends StatelessWidget {
     );
   }
 
-  // Helper method to build a detail card
   Widget _buildDetailCard(String title, String value, IconData icon) {
     return Card(
       elevation: 3,

@@ -23,8 +23,8 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
   DateTime _selectedDate = DateTime.now();
   TimeOfDay _startTime = TimeOfDay.now();
   TimeOfDay _endTime = TimeOfDay.now();
-  String _selectedLeader = 'Thanh Ngân'; // Default value
-  String _selectedStatus = 'Đang thực hiện'; // Default value
+  String _selectedLeader = 'Thanh Ngân'; 
+  String _selectedStatus = 'Đang thực hiện'; 
 
   Future<void> _addTask() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();

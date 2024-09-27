@@ -24,11 +24,11 @@ class CardBody extends StatelessWidget {
     // Màu thẻ theo chế độ sáng hoặc tối
     Color cardColor = item.status == 'Đang thực hiện'
         ? (isDarkMode
-            ? const Color.fromARGB(255, 58, 108, 108) // Màu trong chế độ tối
-            : const Color.fromARGB(255, 104, 189, 189)) // Màu trong chế độ sáng
+            ? const Color.fromARGB(255, 58, 108, 108) 
+            : const Color.fromARGB(255, 104, 189, 189)) 
         : (isDarkMode
-            ? Colors.green[400]! // Màu xanh tối hơn cho chế độ tối
-            : Colors.green[700]!); // Màu mặc định cho chế độ sáng
+            ? Colors.green[400]! 
+            : Colors.green[700]!); 
 
     return Container(
       margin: const EdgeInsets.only(bottom: 20),

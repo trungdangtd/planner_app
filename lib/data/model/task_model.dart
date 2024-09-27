@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 
 class TaskModel {
-  final int? id; // Task ID (nullable since it will be auto-generated)
-  final String name; // Task name
-  final DateTime date; // Task date
-  final String content; // Task content
-  final TimeOfDay startTime; // Task start time
-  final TimeOfDay endTime; // Task end time
-  final String location; // Task location
-  final String leader; // Task leader
+  final int? id; 
+  final String name; 
+  final DateTime date; 
+  final String content; 
+  final TimeOfDay startTime; 
+  final TimeOfDay endTime; 
+  final String location; 
+  final String leader; 
   final String notes;
   final String status;
-  final int userId; // Additional notes
+  final int userId; 
 
   TaskModel({
     this.id,
@@ -27,7 +27,7 @@ class TaskModel {
     required this.userId,
   });
 
-  // Convert a TaskModel object into a Map object for database insertion
+  
   Map<String, dynamic> toMap() {
     return {
       'id': id,
@@ -44,7 +44,7 @@ class TaskModel {
     };
   }
 
-  // Create a TaskModel object from a Map object (useful for retrieving data from the database)
+  
   factory TaskModel.fromMap(Map<String, dynamic> map) {
     return TaskModel(
       id: map['id'],
@@ -61,12 +61,12 @@ class TaskModel {
     );
   }
 
-  // Helper method to convert TimeOfDay to String for database storage
+  
   static String _timeOfDayToString(TimeOfDay time) {
     return '${time.hour}:${time.minute}';
   }
 
-  // Helper method to convert String to TimeOfDay when retrieving from the database
+ 
   static TimeOfDay _stringToTimeOfDay(String time) {
     final parts = time.split(':');
     return TimeOfDay(hour: int.parse(parts[0]), minute: int.parse(parts[1]));
