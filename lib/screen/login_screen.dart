@@ -50,10 +50,10 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.green[100],
+      backgroundColor: const Color.fromRGBO(200, 230, 201, 1),
       appBar: AppBar(
           title: const Text('Đăng nhập'),
-          backgroundColor: const Color(0xFF398378)),
+          ),
       body: Padding(
         padding: const EdgeInsets.all(25),
         child: Column(

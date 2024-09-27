@@ -7,10 +7,10 @@ class WelcomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.green[100],
+      
       appBar: AppBar(
           title: const Text('Daily Planner'),
-          backgroundColor: const Color(0xFF398378)),
+          ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -41,7 +41,7 @@ class WelcomeScreen extends StatelessWidget {
                 'Đăng nhập',
                 style: TextStyle(
                   fontSize: 18,
-                  color: Color(0xFF398378),
+                  color: Colors.white,
                 ),
               ),
             ),

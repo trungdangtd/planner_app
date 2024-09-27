@@ -89,7 +89,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Thêm Công Việc'),
-        backgroundColor: const Color(0xFF398378),
+       
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),

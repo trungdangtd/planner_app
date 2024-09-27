@@ -56,7 +56,7 @@ class _StatisticScreenState extends State<StatisticScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Thống Kê Công Việc'),
-        backgroundColor: const Color(0xFF398378),
+        
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),

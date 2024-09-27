@@ -14,7 +14,7 @@ class TaskDetailScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Chi Tiết Công Việc'),
-        backgroundColor: const Color(0xFF398378),
+       
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),

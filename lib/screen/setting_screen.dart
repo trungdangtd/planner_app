@@ -14,7 +14,6 @@ class SettingScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Cài Đặt'),
-        backgroundColor: const Color(0xFF398378),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -33,14 +32,14 @@ class SettingScreen extends StatelessWidget {
               'Chỉnh sửa giao diện',
               const SettingsWidgetScreen(),
             ),
-            const SizedBox(height: 20), 
+            const SizedBox(height: 20),
             _buildSettingOption(
               context,
               Icons.notifications,
-              'Thông Báo',  
+              'Thông Báo',
               const Center(child: Text('Chưa có thông báo nào')),
             ),
-            const SizedBox(height: 20), 
+            const SizedBox(height: 20),
             SwitchListTile(
               title: const Text('Chế độ tối'),
               value: themeNotifier.isDarkMode,

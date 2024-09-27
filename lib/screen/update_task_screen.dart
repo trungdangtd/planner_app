@@ -63,7 +63,7 @@ class _UpdateTaskScreenState extends State<UpdateTaskScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Cập nhật công việc'),
-        backgroundColor: const Color(0xFF398378),
+        
         actions: [
           IconButton(
             icon: const Icon(Icons.save),

@@ -73,7 +73,7 @@ class _CalendarViewScreenState extends State<CalendarViewScreen> {
     return Scaffold(
       appBar: AppBar(
           title: const Text('Lịch công việc'),
-          backgroundColor: const Color(0xFF398378)),
+          ),
       body: Column(
         children: [
           TableCalendar(

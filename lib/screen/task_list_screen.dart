@@ -64,7 +64,7 @@ class _TaskListScreenState extends State<TaskListScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Danh sách công việc'),
-        backgroundColor: const Color(0xFF398378),
+        
         actions: [
           IconButton(
             icon: const Icon(Icons.calendar_today),
