@@ -33,13 +33,6 @@ class SettingScreen extends StatelessWidget {
               const SettingsWidgetScreen(),
             ),
             const SizedBox(height: 20),
-            _buildSettingOption(
-              context,
-              Icons.notifications,
-              'Thông Báo',
-              const Center(child: Text('Chưa có thông báo nào')),
-            ),
-            const SizedBox(height: 20),
             SwitchListTile(
               title: const Text('Chế độ tối'),
               value: themeNotifier.isDarkMode,
