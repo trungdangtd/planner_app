@@ -12,7 +12,6 @@ class TaskDetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.green[50],
       appBar: AppBar(
         title: const Text('Chi Tiết Công Việc'),
         backgroundColor: const Color(0xFF398378),

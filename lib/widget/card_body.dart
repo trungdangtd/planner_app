@@ -3,12 +3,13 @@ import 'package:intl/intl.dart';
 import 'package:planner_app/data/model/task_model.dart';
 
 class CardBody extends StatelessWidget {
-  const CardBody(
-      {super.key,
-      required this.item,
-      required this.handleDelete,
-      required this.updateTask, 
-      required this.index});
+  const CardBody({
+    super.key,
+    required this.item,
+    required this.handleDelete,
+    required this.updateTask,
+    required this.index,
+  });
 
   final Function(int) handleDelete;
   final Function(TaskModel) updateTask;
@@ -17,9 +18,18 @@ class CardBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Kiểm tra chế độ sáng tối
+    bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
+
+    // Màu thẻ theo chế độ sáng hoặc tối
     Color cardColor = item.status == 'Đang thực hiện'
-        ? const Color.fromARGB(255, 104, 189, 189)
-        : Colors.green[700]!;
+        ? (isDarkMode
+            ? const Color.fromARGB(255, 58, 108, 108) // Màu trong chế độ tối
+            : const Color.fromARGB(255, 104, 189, 189)) // Màu trong chế độ sáng
+        : (isDarkMode
+            ? Colors.green[400]! // Màu xanh tối hơn cho chế độ tối
+            : Colors.green[700]!); // Màu mặc định cho chế độ sáng
+
     return Container(
       margin: const EdgeInsets.only(bottom: 20),
       width: double.infinity,
@@ -27,6 +37,14 @@ class CardBody extends StatelessWidget {
       decoration: BoxDecoration(
         color: cardColor,
         borderRadius: BorderRadius.circular(15),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.2),
+            spreadRadius: 2,
+            blurRadius: 5,
+            offset: const Offset(0, 3),
+          ),
+        ],
       ),
       child: Padding(
         padding: const EdgeInsets.all(15),
@@ -40,15 +58,16 @@ class CardBody extends StatelessWidget {
                   Text(
                     item.name,
                     style: const TextStyle(
-                        fontSize: 17,
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold),
+                      fontSize: 20, // Kích thước chữ lớn hơn
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                   const SizedBox(height: 5),
                   Text(
-                    DateFormat('dd/MM/yyyy').format(item.date),
+                    '${DateFormat('dd/MM/yyyy').format(item.date)} | ${item.startTime.hour}:${item.startTime.minute.toString().padLeft(2, '0')} - ${item.endTime.hour}:${item.endTime.minute.toString().padLeft(2, '0')}',
                     style: const TextStyle(
-                      fontSize: 13,
+                      fontSize: 16, // Kích thước chữ lớn hơn
                       color: Colors.white,
                     ),
                   ),
@@ -56,7 +75,7 @@ class CardBody extends StatelessWidget {
                   Text(
                     item.status,
                     style: const TextStyle(
-                      fontSize: 13,
+                      fontSize: 16, // Kích thước chữ lớn hơn
                       color: Colors.white,
                     ),
                   ),
@@ -67,17 +86,15 @@ class CardBody extends StatelessWidget {
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                InkWell(
+                _buildIconButton(
+                  icon: Icons.edit_outlined,
                   onTap: () {
-                     updateTask(item);
+                    updateTask(item);
                   },
-                  child: const Icon(
-                    Icons.edit_outlined,
-                    color: Colors.black87,
-                  ),
                 ),
                 const SizedBox(height: 10),
-                InkWell(
+                _buildIconButton(
+                  icon: Icons.delete_forever_outlined,
                   onTap: () async {
                     // Confirmation before deletion
                     bool? confirmed = await showDialog(
@@ -102,14 +119,28 @@ class CardBody extends StatelessWidget {
                       handleDelete(item.id!);
                     }
                   },
-                  child: const Icon(
-                    Icons.delete_forever_outlined,
-                    color: Colors.black87,
-                  ),
                 ),
               ],
             ),
           ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildIconButton(
+      {required IconData icon, required VoidCallback onTap}) {
+    return InkWell(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.all(8),
+        decoration: BoxDecoration(
+          color: Colors.white.withOpacity(0.1), // Màu nền nhẹ
+          shape: BoxShape.circle,
+        ),
+        child: Icon(
+          icon,
+          color: Colors.white,
         ),
       ),
     );

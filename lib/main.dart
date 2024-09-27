@@ -1,9 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:planner_app/screen/welcome_screen.dart';
+import 'package:planner_app/widget/theme_provider.dart';
+import 'package:provider/provider.dart';
+import 'screen/welcome_screen.dart'; 
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(const MainApp());
+  runApp(
+    ChangeNotifierProvider(
+      create: (context) => ThemeNotifier(),
+      child: const MainApp(),
+    ),
+  );
 }
 
 class MainApp extends StatelessWidget {
@@ -11,9 +18,12 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    final themeNotifier = Provider.of<ThemeNotifier>(context);
+
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: WelcomeScreen(),
+      theme: themeNotifier.isDarkMode ? ThemeData.dark() : ThemeData.light(),
+      home: const WelcomeScreen(),
     );
   }
 }

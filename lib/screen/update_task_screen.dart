@@ -55,13 +55,12 @@ class _UpdateTaskScreenState extends State<UpdateTaskScreen> {
     );
 
     await _dbHelper.updateTask(updatedTask);
-    Navigator.pop(context); 
+    Navigator.pop(context);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.green[50],
       appBar: AppBar(
         title: const Text('Cập nhật công việc'),
         backgroundColor: const Color(0xFF398378),
@@ -203,7 +202,7 @@ class _UpdateTaskScreenState extends State<UpdateTaskScreen> {
               _status = newValue!;
             });
           },
-          items: <String>['Đang thực hiện', 'Hoàn thành', 'Chưa bắt đầu']
+          items: <String>['Đang thực hiện', 'Đã hoàn thành']
               .map<DropdownMenuItem<String>>((String value) {
             return DropdownMenuItem<String>(
               value: value,

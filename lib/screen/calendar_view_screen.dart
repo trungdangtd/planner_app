@@ -71,11 +71,9 @@ class _CalendarViewScreenState extends State<CalendarViewScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.green[100],
       appBar: AppBar(
-        title: const Text('Lịch công việc'),
-        backgroundColor: const Color(0xFF398378)
-      ),
+          title: const Text('Lịch công việc'),
+          backgroundColor: const Color(0xFF398378)),
       body: Column(
         children: [
           TableCalendar(
@@ -87,18 +85,41 @@ class _CalendarViewScreenState extends State<CalendarViewScreen> {
             onDaySelected: _onDaySelected,
             calendarFormat: CalendarFormat.month,
             startingDayOfWeek: StartingDayOfWeek.monday,
-            calendarStyle: const CalendarStyle(
-              markerDecoration: BoxDecoration(
+            calendarStyle: CalendarStyle(
+              markerDecoration: const BoxDecoration(
                 color: Colors.blueAccent,
                 shape: BoxShape.circle,
               ),
+              todayDecoration: BoxDecoration(
+                color: Colors.blue.shade100,
+                shape: BoxShape.circle,
+              ),
+              selectedDecoration: const BoxDecoration(
+                color: Color(0xFF398378),
+                shape: BoxShape.circle,
+              ),
+            ),
+            headerStyle: const HeaderStyle(
+              formatButtonVisible: false,
+              titleCentered: true,
+              titleTextStyle: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: Color(0xFF398378),
+              ),
+            ),
+            daysOfWeekStyle: const DaysOfWeekStyle(
+              weekdayStyle: TextStyle(color: Color(0xFF398378)),
+              weekendStyle: TextStyle(color: Colors.red),
             ),
           ),
           const SizedBox(height: 8),
           Expanded(
             child: _selectedDayTasks.isEmpty
                 ? const Center(
-                    child: Text('Không có công việc nào trong ngày này.'))
+                    child: Text(
+                    'Không có công việc nào trong ngày này.',
+                  ))
                 : ListView.builder(
                     padding: const EdgeInsets.all(15),
                     itemCount: _selectedDayTasks.length,
