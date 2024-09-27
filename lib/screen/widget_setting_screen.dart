@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:planner_app/data/model/color.dart';
+import 'package:planner_app/data/model/color_text.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:provider/provider.dart';
 
@@ -7,6 +7,7 @@ class SettingsWidgetScreen extends StatefulWidget {
   const SettingsWidgetScreen({super.key});
 
   @override
+  // ignore: library_private_types_in_public_api
   _SettingsScreenState createState() => _SettingsScreenState();
 }
 
@@ -17,10 +18,22 @@ class _SettingsScreenState extends State<SettingsWidgetScreen> {
     Colors.green,
     Colors.orange,
     Colors.purple,
+    Colors.yellow,
+    Colors.teal,
+    Colors.indigo,
+  ];
+
+  final List<String> _availableFonts = [
+    'Roboto',
+    'Arial',
+    'Courier New',
+    'Times New Roman',
+    'Georgia',
   ];
 
   Color _selectedAppBarColor = Colors.blue; // Default AppBar color
   Color _selectedBackgroundColor = Colors.white; // Default background color
+  String _selectedFont = 'Roboto'; // Default font
 
   @override
   void initState() {
@@ -28,10 +41,11 @@ class _SettingsScreenState extends State<SettingsWidgetScreen> {
     loadSettings(); // Load settings when the app starts
   }
 
-  Future<void> saveSettings(Color appBarColor, Color backgroundColor) async {
+  Future<void> saveSettings(Color appBarColor, Color backgroundColor, String font) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setInt('selectedAppBarColor', appBarColor.value);
     prefs.setInt('selectedBackgroundColor', backgroundColor.value);
+    prefs.setString('selectedFont', font);
   }
 
   Future<void> loadSettings() async {
@@ -39,52 +53,74 @@ class _SettingsScreenState extends State<SettingsWidgetScreen> {
     setState(() {
       int? appBarColorValue = prefs.getInt('selectedAppBarColor');
       int? backgroundColorValue = prefs.getInt('selectedBackgroundColor');
+      _selectedFont = prefs.getString('selectedFont') ?? 'Roboto';
 
       _selectedAppBarColor = Color(appBarColorValue ?? Colors.blue.value);
-      _selectedBackgroundColor =
-          Color(backgroundColorValue ?? Colors.white.value);
+      _selectedBackgroundColor = Color(backgroundColorValue ?? Colors.white.value);
     });
-
-    // Update the ColorProvider with loaded colors
-    Provider.of<ColorProvider>(context, listen: false)
+    Provider.of<ColorTextProvider>(context, listen: false)
         .setColor(_selectedAppBarColor); // Set AppBar color
-    Provider.of<ColorProvider>(context, listen: false)
+    Provider.of<ColorTextProvider>(context, listen: false)
         .setBackgroundColor(_selectedBackgroundColor); // Set Background color
+    Provider.of<ColorTextProvider>(context, listen: false)
+        .setFont(_selectedFont); // Set font
   }
 
-  void _openAppBarColorPicker() {
+  void _openColorPicker(String type) {
     showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: const Text("Chọn màu cho AppBar"),
-          content: SingleChildScrollView(
-            child: Column(
-              children: _availableColors.map((color) {
+          title: Text("Chọn màu ${type == 'appBar' ? 'cho AppBar' : 'nền'}"),
+          content: SizedBox(
+            width: double.maxFinite,
+            child: GridView.builder(
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 4,
+                childAspectRatio: 1.0,
+                crossAxisSpacing: 10.0,
+                mainAxisSpacing: 10.0,
+              ),
+              itemCount: _availableColors.length,
+              itemBuilder: (context, index) {
+                Color color = _availableColors[index];
                 return GestureDetector(
                   onTap: () {
                     setState(() {
-                      _selectedAppBarColor =
-                          color; // Update selected AppBar color
+                      if (type == 'appBar') {
+                        _selectedAppBarColor = color; // Update selected AppBar color
+                      } else {
+                        _selectedBackgroundColor = color; // Update selected background color
+                      }
                     });
-                    saveSettings(_selectedAppBarColor, _selectedBackgroundColor); // Save settings
-                    Provider.of<ColorProvider>(context, listen: false)
+                    saveSettings(_selectedAppBarColor, _selectedBackgroundColor, _selectedFont); // Save settings
+                    Provider.of<ColorTextProvider>(context, listen: false)
                         .setColor(_selectedAppBarColor); // Update app color
+                    Provider.of<ColorTextProvider>(context, listen: false)
+                        .setBackgroundColor(_selectedBackgroundColor); // Update background color
                     Navigator.pop(context); // Close dialog
                   },
                   child: Container(
-                    width: 100,
-                    height: 50,
-                    color: color,
-                    margin: const EdgeInsets.symmetric(vertical: 5),
+                    margin: const EdgeInsets.all(4),
+                    decoration: BoxDecoration(
+                      color: color,
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(
+                        color: _selectedAppBarColor == color ||
+                                _selectedBackgroundColor == color
+                            ? Colors.black
+                            : Colors.transparent,
+                        width: 3,
+                      ),
+                    ),
                     alignment: Alignment.center,
-                    child: Text(
-                      "Màu ${color.toString()}",
-                      style: const TextStyle(color: Colors.white),
+                    child: const Text(
+                      " ",
+                      style: TextStyle(color: Colors.white),
                     ),
                   ),
                 );
-              }).toList(),
+              },
             ),
           ),
           actions: [
@@ -98,39 +134,34 @@ class _SettingsScreenState extends State<SettingsWidgetScreen> {
     );
   }
 
-  void _openBackgroundColorPicker() {
+  void _openFontPicker() {
     showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: const Text("Chọn màu nền"),
-          content: SingleChildScrollView(
-            child: Column(
-              children: _availableColors.map((color) {
-                return GestureDetector(
+          title: const Text("Chọn phông chữ"),
+          content: SizedBox(
+            width: double.maxFinite,
+            child: ListView.builder(
+              itemCount: _availableFonts.length,
+              itemBuilder: (context, index) {
+                String font = _availableFonts[index];
+                return ListTile(
+                  title: Text(font,
+                      style: TextStyle(
+                          fontFamily: font,
+                          color: _selectedFont == font ? _selectedAppBarColor : Colors.black)),
                   onTap: () {
                     setState(() {
-                      _selectedBackgroundColor =
-                          color; // Update selected background color
+                      _selectedFont = font; // Update selected font
                     });
-                    saveSettings(_selectedAppBarColor, _selectedBackgroundColor); // Save settings
-                    Provider.of<ColorProvider>(context, listen: false)
-                        .setBackgroundColor(_selectedBackgroundColor); // Update background color
+                    saveSettings(_selectedAppBarColor, _selectedBackgroundColor, _selectedFont); // Save settings
+                    Provider.of<ColorTextProvider>(context, listen: false)
+                        .setFont(_selectedFont); // Update font
                     Navigator.pop(context); // Close dialog
                   },
-                  child: Container(
-                    width: 100,
-                    height: 50,
-                    color: color,
-                    margin: const EdgeInsets.symmetric(vertical: 5),
-                    alignment: Alignment.center,
-                    child: Text(
-                      "Màu ${color.toString()}",
-                      style: const TextStyle(color: Colors.white),
-                    ),
-                  ),
                 );
-              }).toList(),
+              },
             ),
           ),
           actions: [
@@ -147,35 +178,86 @@ class _SettingsScreenState extends State<SettingsWidgetScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: _selectedBackgroundColor, // Set the background color to the selected background color
+      backgroundColor: _selectedBackgroundColor,
       appBar: AppBar(
-        title: const Text("Cài đặt"),
-        backgroundColor: _selectedAppBarColor, // Set AppBar color to the selected AppBar color
+        title: const Text("Cài đặt giao diện"),
+        backgroundColor: _selectedAppBarColor,
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Text(
-              'Màu nền hiện tại:',
-              style: TextStyle(fontSize: 20),
-            ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: _openBackgroundColorPicker, // Open background color picker
-              child: const Text("Chọn màu nền"),
-            ),
-            const SizedBox(height: 20),
-            const Text(
-              'Màu AppBar hiện tại:',
-              style: TextStyle(fontSize: 20),
-            ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: _openAppBarColorPicker, // Open AppBar color picker
-              child: const Text("Chọn màu cho AppBar"),
-            ),
-          ],
+      body: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                'Màu nền hiện tại:',
+                style: TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold,
+                    color: _selectedAppBarColor),
+              ),
+              const SizedBox(height: 10),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor:
+                      _selectedAppBarColor, // Use selected AppBar color
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10)),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                ),
+                onPressed: () => _openColorPicker(
+                    'background'), // Open background color picker
+                child: const Text("Chọn màu nền",
+                    style: TextStyle(fontSize: 18, color: Colors.white)),
+              ),
+              const SizedBox(height: 20),
+              Text(
+                'Màu AppBar hiện tại:',
+                style: TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold,
+                    color: _selectedAppBarColor),
+              ),
+              const SizedBox(height: 10),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor:
+                      _selectedAppBarColor, // Use selected AppBar color
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10)),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                ),
+                onPressed: () =>
+                    _openColorPicker('appBar'), // Open AppBar color picker
+                child: const Text("Chọn màu cho AppBar",
+                    style: TextStyle(fontSize: 18, color: Colors.white)),
+              ),
+              const SizedBox(height: 20),
+              Text(
+                'Phông chữ hiện tại:',
+                style: TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold,
+                    color: _selectedAppBarColor),
+              ),
+              const SizedBox(height: 10),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor:
+                      _selectedAppBarColor, // Use selected AppBar color
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10)),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                ),
+                onPressed: () => _openFontPicker(), // Open font picker
+                child: const Text("Chọn phông chữ",
+                    style: TextStyle(fontSize: 18, color: Colors.white)),
+              ),
+            ],
+          ),
         ),
       ),
     );
